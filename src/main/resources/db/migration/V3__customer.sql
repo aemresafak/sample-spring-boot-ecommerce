@@ -5,8 +5,8 @@ CREATE TABLE IF NOT EXISTS customer
     last_name  VARCHAR(255)                               NOT NULL,
     email      VARCHAR(255)                               NOT NULL,
     birth_date DATE                                       NOT NULL,
-    created_at TIMESTAMP        DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at TIMESTAMP        DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
     deleted    BOOLEAN          DEFAULT FALSE             NOT NULL
 );
 
@@ -14,8 +14,8 @@ CREATE TABLE IF NOT EXISTS cart
 (
     id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     customer_id UUID                                       NOT NULL REFERENCES customer (id) ON DELETE CASCADE,
-    created_at  TIMESTAMP        DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at  TIMESTAMP        DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
     deleted     BOOLEAN          DEFAULT FALSE             NOT NULL
 );
 
@@ -25,8 +25,8 @@ CREATE TABLE IF NOT EXISTS cart_item
     product_id UUID                                       NOT NULL REFERENCES product (id) ON DELETE CASCADE,
     cart_id    UUID                                       NOT NULL REFERENCES cart (id) ON DELETE CASCADE,
     quantity   INT                                        NOT NULL,
-    created_at TIMESTAMP        DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at TIMESTAMP        DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
     deleted    BOOLEAN          DEFAULT FALSE             NOT NULL
 );
 
@@ -38,8 +38,8 @@ CREATE TABLE IF NOT EXISTS shipping
     shipped_at   TIMESTAMP,
     delivered_at TIMESTAMP,
     status       VARCHAR(255)                               NOT NULL,
-    created_at   TIMESTAMP        DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at   TIMESTAMP        DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
     deleted      BOOLEAN          DEFAULT FALSE             NOT NULL
 );
 
@@ -51,8 +51,8 @@ CREATE TABLE IF NOT EXISTS discount
     end_date     TIMESTAMP                                  NOT NULL,
     percentage   NUMERIC(2, 2)                              NOT NULL,
     fixed_amount NUMERIC(10, 2)                             NOT NULL,
-    created_at   TIMESTAMP        DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at   TIMESTAMP        DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
     deleted      BOOLEAN          DEFAULT FALSE             NOT NULL
 );
 
@@ -65,8 +65,8 @@ CREATE TABLE IF NOT EXISTS customer_order
     discount_id  UUID REFERENCES discount (id),
     order_status VARCHAR(255)                               NOT NULL,
     order_date   TIMESTAMP                                  NOT NULL,
-    created_at   TIMESTAMP        DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at   TIMESTAMP        DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
     deleted      BOOLEAN          DEFAULT FALSE             NOT NULL
 );
 
@@ -78,8 +78,8 @@ CREATE TABLE IF NOT EXISTS payment
     amount        NUMERIC(10, 2)                             NOT NULL,
     currency_code VARCHAR(3)                                 NOT NULL REFERENCES currency (code),
     status        VARCHAR(255)                               NOT NULL,
-    created_at    TIMESTAMP        DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at    TIMESTAMP        DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
     deleted       BOOLEAN          DEFAULT FALSE             NOT NULL
 );
 
@@ -92,7 +92,7 @@ CREATE TABLE IF NOT EXISTS review
     product_id  UUID                                       NOT NULL REFERENCES product (id) ON DELETE CASCADE,
     order_id    UUID                                       NOT NULL REFERENCES customer_order (id) ON DELETE CASCADE,
     customer_id UUID                                       NOT NULL REFERENCES customer (id) ON DELETE CASCADE,
-    created_at  TIMESTAMP        DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at  TIMESTAMP        DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
     deleted     BOOLEAN          DEFAULT FALSE             NOT NULL
 );
