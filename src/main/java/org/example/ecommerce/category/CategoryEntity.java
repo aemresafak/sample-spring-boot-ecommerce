@@ -11,7 +11,7 @@ import org.springframework.lang.Nullable;
 @Getter
 @Setter
 @Table(name ="category")
-public class CategoryEntity extends BaseEntity<Integer> {
+public class CategoryEntity extends BaseEntity {
     private String name;
     @Nullable
     private String description;

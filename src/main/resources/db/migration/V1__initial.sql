@@ -1,39 +1,39 @@
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
-CREATE TABLE IF NOT EXISTS categoryEntity
+CREATE TABLE IF NOT EXISTS category
 (
-    id          INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    name        VARCHAR(255)                          NOT NULL,
+    id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name        VARCHAR(255)                               NOT NULL,
     description TEXT,
-    created_at  TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at  TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    deleted     BOOLEAN     DEFAULT FALSE             NOT NULL
+    created_at  TIMESTAMPTZ      DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at  TIMESTAMPTZ      DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    deleted     BOOLEAN          DEFAULT FALSE             NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS sub_category
 (
-    id          INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    name        VARCHAR(255)                          NOT NULL,
+    id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name        VARCHAR(255)                               NOT NULL,
     description TEXT,
-    category_id INT                                   NOT NULL,
-    created_at  TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at  TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    deleted     BOOLEAN     DEFAULT FALSE             NOT NULL,
-    CONSTRAINT fk_category FOREIGN KEY (category_id) REFERENCES categoryEntity (id) ON DELETE CASCADE
+    category_id uuid                                       NOT NULL,
+    created_at  TIMESTAMPTZ      DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at  TIMESTAMPTZ      DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    deleted     BOOLEAN          DEFAULT FALSE             NOT NULL,
+    CONSTRAINT fk_category FOREIGN KEY (category_id) REFERENCES category (id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS product
 (
     id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    category_id     INT                                        NOT NULL,
-    sub_category_id INT                                        NOT NULL,
+    category_id     uuid                                       NOT NULL,
+    sub_category_id uuid                                       NOT NULL,
     name            VARCHAR(255)                               NOT NULL,
     description     TEXT,
     image_url       TEXT,
     created_at      TIMESTAMPTZ      DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at      TIMESTAMPTZ      DEFAULT CURRENT_TIMESTAMP NOT NULL,
     deleted         BOOLEAN          DEFAULT FALSE             NOT NULL,
-    CONSTRAINT fk_product_category FOREIGN KEY (category_id) REFERENCES categoryEntity (id),
+    CONSTRAINT fk_product_category FOREIGN KEY (category_id) REFERENCES category (id),
     CONSTRAINT fk_product_sub_category FOREIGN KEY (sub_category_id) REFERENCES sub_category (id)
 );
 

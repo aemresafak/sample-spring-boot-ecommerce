@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <springProfile name="local | test">
+        <include resource="org/springframework/boot/logging/logback/base.xml"/>
+    </springProfile>
+    <springProfile name="prod | stg | dev">
+        <appender name="jsonConsoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+                <timeZone>UTC</timeZone>
+                <timestampPattern>yyyy-MM-dd' 'HH:mm:ss.SSS</timestampPattern>
+                <fieldNames>
+                    <version>[ignore]</version>
+                    <levelValue>[ignore]</levelValue>
+                </fieldNames>
+                <!-- MaskingJsonGeneratorDecorator masks the values for keys in <path>'s.
+                see documentation at https://github.com/logfellow/logstash-logback-encoder#masking -->
+                <jsonGeneratorDecorator class="net.logstash.logback.mask.MaskingJsonGeneratorDecorator">
+                    <defaultMask>****</defaultMask>
+                    <path>cardNumber</path>
+                    <path>cardPan</path>
+                    <path>password</path>
+                    <path>verificationCode</path>
+                    <path>usAccountNumber</path>
+                    <path>accountNumber</path>
+                </jsonGeneratorDecorator>
+            </encoder>
+        </appender>
+        <root level="INFO">
+            <appender-ref ref="jsonConsoleAppender"/>
+        </root>
+    </springProfile>
+</configuration>
