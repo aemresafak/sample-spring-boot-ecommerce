@@ -1,6 +1,6 @@
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
-CREATE TABLE IF NOT EXISTS category
+CREATE TABLE IF NOT EXISTS categoryEntity
 (
     id          INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     name        VARCHAR(255)                          NOT NULL,
@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS sub_category
     created_at  TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at  TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
     deleted     BOOLEAN     DEFAULT FALSE             NOT NULL,
-    CONSTRAINT fk_category FOREIGN KEY (category_id) REFERENCES category (id) ON DELETE CASCADE
+    CONSTRAINT fk_category FOREIGN KEY (category_id) REFERENCES categoryEntity (id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS product
@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS product
     created_at      TIMESTAMPTZ      DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at      TIMESTAMPTZ      DEFAULT CURRENT_TIMESTAMP NOT NULL,
     deleted         BOOLEAN          DEFAULT FALSE             NOT NULL,
-    CONSTRAINT fk_product_category FOREIGN KEY (category_id) REFERENCES category (id),
+    CONSTRAINT fk_product_category FOREIGN KEY (category_id) REFERENCES categoryEntity (id),
     CONSTRAINT fk_product_sub_category FOREIGN KEY (sub_category_id) REFERENCES sub_category (id)
 );
 

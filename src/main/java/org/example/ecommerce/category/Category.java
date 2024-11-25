@@ -1,14 +1,9 @@
 package org.example.ecommerce.category;
 
-import jakarta.persistence.Entity;
-import lombok.Getter;
-import lombok.Setter;
-import org.example.ecommerce.common.BaseEntity;
+import org.springframework.lang.Nullable;
 
-@Entity
-@Getter
-@Setter
-public class Category extends BaseEntity<Integer> {
-    private String name;
-    private String description;
+public record Category(Integer id, String name, @Nullable String description) {
+    public static Category from(CategoryEntity categoryEntity) {
+        return new Category(categoryEntity.getId(), categoryEntity.getName(), categoryEntity.getDescription());
+    }
 }
