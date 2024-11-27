@@ -2,6 +2,7 @@ package org.example.ecommerce.category;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.ecommerce.common.NotFoundException;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
@@ -26,12 +27,20 @@ public class CategoryJpaService {
         return savedCategory.getId();
     }
 
+    public void updateDescription(UUID categoryId, @Nullable String description) {
+        log.info("Updating description {} {}", kv("categoryId", categoryId), kv("description", description));
+        var affectedRows = categoryRepository.updateCategoryDescription(categoryId, description);
+        if (affectedRows == 0) {
+            throw new NotFoundException();
+        }
+    }
+
     public List<Category> findAll() {
         log.info("Finding all categories");
         return categoryRepository.findAll().stream().map(Category::from).toList();
     }
 
-    public Optional<Category> findById(Integer id) {
+    public Optional<Category> findById(UUID id) {
         log.info("Fetching category by {}", kv("id", id));
         return categoryRepository.findById(id).map(Category::from);
     }
