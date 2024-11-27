@@ -1,4 +1,4 @@
-package org.example.ecommerce.category;
+package org.example.ecommerce.category.jpa;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

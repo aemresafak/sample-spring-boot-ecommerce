@@ -1,4 +1,4 @@
-package org.example.ecommerce.category;
+package org.example.ecommerce.category.controller.model;
 
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.lang.Nullable;

@@ -1,7 +1,8 @@
-package org.example.ecommerce.category;
+package org.example.ecommerce.category.jpa;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.ecommerce.category.Category;
 import org.example.ecommerce.common.NotFoundException;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;

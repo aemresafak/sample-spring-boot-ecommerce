@@ -1,5 +1,6 @@
 package org.example.ecommerce.category;
 
+import org.example.ecommerce.category.jpa.CategoryEntity;
 import org.springframework.lang.Nullable;
 
 import java.util.UUID;

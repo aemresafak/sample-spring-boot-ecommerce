@@ -1,4 +1,4 @@
-package org.example.ecommerce.category;
+package org.example.ecommerce.category.jpa;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;

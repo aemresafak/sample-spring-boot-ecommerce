@@ -1,4 +1,4 @@
-package org.example.ecommerce.category;
+package org.example.ecommerce.category.controller.model;
 
 import org.springframework.lang.Nullable;
 

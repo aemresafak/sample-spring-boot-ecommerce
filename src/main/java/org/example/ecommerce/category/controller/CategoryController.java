@@ -1,8 +1,13 @@
-package org.example.ecommerce.category;
+package org.example.ecommerce.category.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.ecommerce.category.Category;
+import org.example.ecommerce.category.jpa.CategoryJpaService;
+import org.example.ecommerce.category.controller.model.CreateCategoryRequest;
+import org.example.ecommerce.category.controller.model.CreateCategoryResponse;
+import org.example.ecommerce.category.controller.model.UpdateDescriptionRequest;
 import org.example.ecommerce.common.NotFoundException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
