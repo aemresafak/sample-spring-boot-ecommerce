@@ -45,4 +45,10 @@ public class GlobalRestControllerAdvice {
 
         return Map.of("error", "Validation error", "message", stringBuilder.toString());
     }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(NotFoundException.class)
+    public Map<String, String> handleNotFoundException(NotFoundException exception) {
+        return Map.of("error",exception.getMessage());
+    }
 }
