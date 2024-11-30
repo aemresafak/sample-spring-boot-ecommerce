@@ -9,5 +9,7 @@ import java.util.UUID;
 public record CreateProductRequest(@NotBlank String name,
                                    @Nullable String description,
                                    @Nullable String imageUrl,
-                                   @NotNull UUID subCategoryId) {
+                                   @NotNull UUID subCategoryId,
+                                   @NotNull UUID productPriceId,
+                                   @NotNull UUID productInventoryId) {
 }

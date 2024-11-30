@@ -22,29 +22,6 @@ CREATE TABLE IF NOT EXISTS sub_category
     CONSTRAINT fk_category FOREIGN KEY (category_id) REFERENCES category (id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS product
-(
-    id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    category_id     uuid                                       NOT NULL,
-    sub_category_id uuid                                       NOT NULL,
-    name            VARCHAR(255)                               NOT NULL,
-    description     TEXT,
-    image_url       TEXT,
-    created_at      TIMESTAMPTZ      DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at      TIMESTAMPTZ      DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    deleted         BOOLEAN          DEFAULT FALSE             NOT NULL,
-    CONSTRAINT fk_product_category FOREIGN KEY (category_id) REFERENCES category (id),
-    CONSTRAINT fk_product_sub_category FOREIGN KEY (sub_category_id) REFERENCES sub_category (id)
-);
-
-CREATE TABLE IF NOT EXISTS product_inventory
-(
-    id         UUID PRIMARY KEY REFERENCES product (id) ON DELETE CASCADE,
-    quantity   BIGINT                                NOT NULL,
-    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    deleted    BOOLEAN     DEFAULT FALSE             NOT NULL
-);
 
 CREATE TABLE IF NOT EXISTS currency
 (
@@ -60,13 +37,36 @@ CREATE TABLE IF NOT EXISTS currency
 CREATE TABLE IF NOT EXISTS product_price
 (
     id                  UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    product_id          UUID                                       NOT NULL,
     currency_id         UUID                                       NOT NULL,
     price               NUMERIC(10, 2)                             NOT NULL,
     discount_percentage NUMERIC(3, 1)                              NOT NULL DEFAULT 0,
     created_at          TIMESTAMPTZ      DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at          TIMESTAMPTZ      DEFAULT CURRENT_TIMESTAMP NOT NULL,
     deleted             BOOLEAN          DEFAULT FALSE             NOT NULL,
-    CONSTRAINT fk_product_price_product FOREIGN KEY (product_id) REFERENCES product (id) ON DELETE CASCADE,
     CONSTRAINT fk_product_price_currency FOREIGN KEY (currency_id) REFERENCES currency (id)
 );
+
+CREATE TABLE IF NOT EXISTS product_inventory
+(
+    id         UUID PRIMARY KEY,
+    quantity   BIGINT                                NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    deleted    BOOLEAN     DEFAULT FALSE             NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS product
+(
+    id                   UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    created_at           TIMESTAMPTZ      DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at           TIMESTAMPTZ      DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    deleted              BOOLEAN          DEFAULT FALSE             NOT NULL,
+    sub_category_id      uuid                                       NOT NULL REFERENCES sub_category (id),
+    name                 VARCHAR(255)                               NOT NULL,
+    price_id             uuid                                       NOT NULL REFERENCES product_price (id),
+    product_inventory_id uuid                                       NOT NULL REFERENCES product_inventory (id),
+    description          TEXT,
+    image_url            TEXT,
+    CONSTRAINT fk_product_sub_category FOREIGN KEY (sub_category_id) REFERENCES sub_category (id)
+);
+

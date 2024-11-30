@@ -12,19 +12,19 @@ import java.util.UUID;
 public class ProductPriceController {
     private final ProductPriceJpaService productPriceJpaService;
 
-    @GetMapping("/{productId}")
-    public ProductPrice getProductPrice(@PathVariable UUID productId) {
-        return productPriceJpaService.getProductPriceByProductId(productId).orElseThrow(NotFoundException::new);
+    @GetMapping("/{priceId}")
+    public ProductPrice getProductPrice(@PathVariable UUID priceId) {
+        return productPriceJpaService.getProductPriceById(priceId).orElseThrow(NotFoundException::new);
     }
 
     @PostMapping
     public UUID createProductPrice(@RequestBody CreateProductPriceRequest request) {
-        return productPriceJpaService.createProductPrice(request.productId(), request.price(), request.discountPercentage(), request.currencyCode());
+        return productPriceJpaService.createProductPrice(request.price(), request.discountPercentage(), request.currencyCode());
     }
 
     @PutMapping
     public ProductPrice updateProductPrice(@RequestBody UpdateProductPriceRequest request) {
-        return productPriceJpaService.updateProductPrice(request.productId(), request.price(), request.discountPercentage(), request.currencyCode());
+        return productPriceJpaService.updateProductPrice(request.priceId(), request.price(), request.discountPercentage(), request.currencyCode());
     }
 
 

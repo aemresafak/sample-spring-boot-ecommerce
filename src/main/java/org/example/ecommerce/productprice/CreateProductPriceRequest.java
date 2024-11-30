@@ -10,6 +10,5 @@ import java.util.UUID;
 
 public record CreateProductPriceRequest(@PositiveOrZero @Digits(integer = 10, fraction = 2) BigDecimal price,
                                         @PositiveOrZero @Digits(integer = 1, fraction = 2) BigDecimal discountPercentage,
-                                        @NotBlank String currencyCode,
-                                        @NotNull UUID productId) {
+                                        @NotBlank String currencyCode) {
 }

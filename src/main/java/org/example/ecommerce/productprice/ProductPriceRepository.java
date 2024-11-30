@@ -9,7 +9,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface ProductPriceRepository extends JpaRepository<ProductPriceEntity, UUID> {
-    Optional<ProductPriceEntity> findByProductIdAndDeletedFalse(UUID productId);
 
     @Query("UPDATE ProductPriceEntity p SET p.deleted = true WHERE p.id = :uuid")
     @Modifying

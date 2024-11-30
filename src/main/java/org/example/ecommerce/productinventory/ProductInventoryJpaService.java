@@ -20,11 +20,10 @@ public class ProductInventoryJpaService {
         return productInventoryRepository.findById(id).map(ProductInventory::from);
     }
 
-    public void createOrUpdateInventory(UUID productId, long quantity) {
-        log.info("Creating inventory {} {}",kv("productId",productId), kv("quantity",quantity));
+    public UUID createOrUpdateInventory(long quantity) {
+        log.info("Creating inventory {}", kv("quantity", quantity));
         var productInventory = new ProductInventoryEntity();
-        productInventory.setId(productId);
         productInventory.setQuantity(quantity);
-        productInventoryRepository.save(productInventory);
+        return productInventoryRepository.save(productInventory).getId();
     }
 }

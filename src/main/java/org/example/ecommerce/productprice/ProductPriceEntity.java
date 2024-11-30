@@ -7,7 +7,6 @@ import org.example.ecommerce.common.BaseEntity;
 import org.example.ecommerce.currency.CurrencyEntity;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
 
 @Entity
@@ -17,8 +16,8 @@ import java.util.UUID;
 public class ProductPriceEntity extends BaseEntity {
     private BigDecimal price;
     private BigDecimal discountPercentage;
+
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "currency_id")
     private CurrencyEntity currency;
-    private UUID productId;
 }

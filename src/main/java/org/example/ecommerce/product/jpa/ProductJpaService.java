@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.ecommerce.common.NotFoundException;
 import org.example.ecommerce.product.Product;
 import org.example.ecommerce.product.ProductWithCategory;
+import org.example.ecommerce.productinventory.ProductInventoryRepository;
+import org.example.ecommerce.productprice.ProductPriceRepository;
 import org.example.ecommerce.subcategory.jpa.SubCategoryRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.lang.Nullable;
@@ -21,6 +23,8 @@ import static net.logstash.logback.argument.StructuredArguments.kv;
 @Slf4j
 public class ProductJpaService {
     private final ProductRepository productRepository;
+    private final ProductPriceRepository productPriceRepository;
+    private final ProductInventoryRepository productInventoryRepository;
     private final SubCategoryRepository subCategoryRepository;
 
     public List<Product> getAll() {
@@ -43,18 +47,22 @@ public class ProductJpaService {
         return productRepository.findProductEntityWithSubCategory(id).map(ProductWithCategory::from);
     }
 
-    public UUID createProduct(String name, @Nullable String description, @Nullable String imageUrl, UUID subCategoryId) {
+    public UUID createProduct(String name, @Nullable String description, @Nullable String imageUrl, UUID subCategoryId, UUID productPriceId, UUID productInventoryId) {
         try {
             var subCategoryEntity = subCategoryRepository.getReferenceById(subCategoryId);
+            var productPriceEntity = productPriceRepository.getReferenceById(productPriceId);
+            var productInventoryEntity = productInventoryRepository.getReferenceById(productInventoryId);
             var product = new ProductEntity();
             product.setName(name);
             product.setDescription(description);
             product.setImageUrl(imageUrl);
+            product.setPrice(productPriceEntity);
             product.setSubCategoryEntity(subCategoryEntity);
+            product.setProductInventoryEntity(productInventoryEntity);
             var savedEntity = productRepository.save(product);
             return savedEntity.getId();
         } catch (DataIntegrityViolationException ex) {
-            throw new NotFoundException("Parent sub-category is not found.");
+            throw new NotFoundException("Invalid subCategoryId or productPriceId");
         }
 
     }

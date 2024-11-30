@@ -28,7 +28,7 @@ public class ProductController {
 
     @PostMapping
     public CreateProductResponse createProduct(@RequestBody @Valid CreateProductRequest createProductRequest) {
-        var id = productJpaService.createProduct(createProductRequest.name(), createProductRequest.description(), createProductRequest.imageUrl(), createProductRequest.subCategoryId());
+        var id = productJpaService.createProduct(createProductRequest.name(), createProductRequest.description(), createProductRequest.imageUrl(), createProductRequest.subCategoryId(), createProductRequest.productPriceId(), createProductRequest.productInventoryId());
         return new CreateProductResponse(id);
     }
 

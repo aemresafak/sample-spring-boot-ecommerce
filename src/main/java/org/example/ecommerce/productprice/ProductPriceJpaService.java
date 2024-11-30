@@ -17,20 +17,19 @@ public class ProductPriceJpaService {
     private final ProductPriceRepository productPriceRepository;
     private final CurrencyRepository currencyRepository;
 
-    public Optional<ProductPrice> getProductPriceByProductId(UUID productId) {
-        return productPriceRepository.findByProductIdAndDeletedFalse(productId).map(ProductPrice::from);
+    public Optional<ProductPrice> getProductPriceById(UUID id) {
+        return productPriceRepository.findById(id).map(ProductPrice::from);
     }
 
     @Transactional
-    public ProductPrice updateProductPrice(UUID productId, @Nullable BigDecimal price, @Nullable BigDecimal discountPercentage, @Nullable String currencyCode) {
-        var productPriceEntityOptional = productPriceRepository.findByProductIdAndDeletedFalse(productId);
+    public ProductPrice updateProductPrice(UUID id, @Nullable BigDecimal price, @Nullable BigDecimal discountPercentage, @Nullable String currencyCode) {
+        var productPriceEntityOptional = productPriceRepository.findById(id);
         if (productPriceEntityOptional.isEmpty()) {
             throw new BusinessException();
         }
         var oldProductPriceEntity = productPriceEntityOptional.get();
         var newProductPriceEntity = new ProductPriceEntity();
         newProductPriceEntity.setCurrency(oldProductPriceEntity.getCurrency());
-        newProductPriceEntity.setProductId(productId);
         newProductPriceEntity.setPrice(oldProductPriceEntity.getPrice());
         newProductPriceEntity.setDiscountPercentage(oldProductPriceEntity.getDiscountPercentage());
 
@@ -48,17 +47,20 @@ public class ProductPriceJpaService {
             newProductPriceEntity.setCurrency(currencyEntity);
         }
 
-        productPriceRepository.softDeleteById(oldProductPriceEntity.getId());
+        var affectedRows = productPriceRepository.softDeleteById(oldProductPriceEntity.getId());
+
+        if (affectedRows != 1) {
+            throw new BusinessException();
+        }
 
         var savedEntity = productPriceRepository.save(newProductPriceEntity);
         return ProductPrice.from(savedEntity);
     }
 
-    public UUID createProductPrice(UUID productId, BigDecimal price, BigDecimal discountPercentage, String currencyCode) {
+    public UUID createProductPrice(BigDecimal price, BigDecimal discountPercentage, String currencyCode) {
         var currencyEntity = currencyRepository.findByCode(currencyCode).orElseThrow(BusinessException::new);
         var productPriceEntity = new ProductPriceEntity();
         productPriceEntity.setCurrency(currencyEntity);
-        productPriceEntity.setProductId(productId);
         productPriceEntity.setPrice(price);
         productPriceEntity.setDiscountPercentage(discountPercentage);
         var saved = productPriceRepository.save(productPriceEntity);

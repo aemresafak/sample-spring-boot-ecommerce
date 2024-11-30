@@ -12,13 +12,14 @@ import java.util.UUID;
 public class ProductInventoryController {
     private final ProductInventoryJpaService productInventoryJpaService;
 
-    @GetMapping("/{productId}")
-    public ProductInventory getProductInventory(@PathVariable UUID productId) {
-        return productInventoryJpaService.findById(productId).orElseThrow(NotFoundException::new);
+    @GetMapping("/{inventoryId}")
+    public ProductInventory getProductInventory(@PathVariable UUID inventoryId) {
+        return productInventoryJpaService.findById(inventoryId).orElseThrow(NotFoundException::new);
     }
 
     @PostMapping
-    public void createProductInventory(@RequestBody ProductInventory productInventory) {
-        productInventoryJpaService.createOrUpdateInventory(productInventory.productId(), productInventory.quantity());
+    public CreateProductInventoryResponse createProductInventory(@RequestBody CreateProductInventoryRequest request) {
+        var id = productInventoryJpaService.createOrUpdateInventory(request.quantity());
+        return new CreateProductInventoryResponse(id);
     }
 }
