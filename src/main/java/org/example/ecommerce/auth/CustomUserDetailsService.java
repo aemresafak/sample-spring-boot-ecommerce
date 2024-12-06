@@ -10,8 +10,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import static net.logstash.logback.argument.StructuredArguments.kv;
-
 @Slf4j
 @RequiredArgsConstructor
 @Service
