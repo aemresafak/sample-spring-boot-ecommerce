@@ -9,27 +9,29 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextHolderStrategy;
 import org.springframework.security.web.context.SecurityContextRepository;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.web.csrf.CsrfToken;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/v1")
 @RequiredArgsConstructor
+@RequestMapping("/v1")
 public class AuthenticationController {
     private final AuthenticationManager authenticationManager;
     private final SecurityContextHolderStrategy securityContextHolderStrategy = SecurityContextHolder.getContextHolderStrategy();
     private final SecurityContextRepository securityContextRepository;
 
-    @PostMapping("/login")
-    public void login(@Valid @RequestBody LoginRequest loginRequest, HttpServletRequest request, HttpServletResponse response) {
-        var token = UsernamePasswordAuthenticationToken.unauthenticated(loginRequest.email(), loginRequest.credentials());
-        var authentication = authenticationManager.authenticate(token);
-        var context = securityContextHolderStrategy.createEmptyContext();
-        context.setAuthentication(authentication);
-        securityContextHolderStrategy.setContext(context);
-        securityContextRepository.saveContext(context, request, response);
+    @GetMapping("/csrf")
+    public CsrfToken csrf(CsrfToken csrfToken) {
+        return csrfToken;
     }
 
+    @PostMapping("/login")
+    public void login(@Valid @RequestBody LoginRequest loginRequest, HttpServletRequest request, HttpServletResponse response) {
+        var inputAuthToken = UsernamePasswordAuthenticationToken.unauthenticated(loginRequest.email(), loginRequest.credentials());
+        var authentication = authenticationManager.authenticate(inputAuthToken);
+        var securityContext = securityContextHolderStrategy.createEmptyContext();
+        securityContext.setAuthentication(authentication);
+        securityContextHolderStrategy.setContext(securityContext);
+        securityContextRepository.saveContext(securityContext, request, response);
+    }
 }
