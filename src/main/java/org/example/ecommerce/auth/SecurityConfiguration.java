@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
 import org.springframework.security.config.annotation.web.configurers.RequestCacheConfigurer;
@@ -23,6 +24,7 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.header.writers.ClearSiteDataHeaderWriter;
 
 @Configuration
+@EnableMethodSecurity
 public class SecurityConfiguration {
 
     private static void customizeLogout(LogoutConfigurer<HttpSecurity> logout) {
@@ -38,7 +40,7 @@ public class SecurityConfiguration {
         http
                 .authorizeHttpRequests((authorize) -> authorize
                         .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.ERROR).permitAll()
-                        .requestMatchers("/v1/login", "/v1/categories", "/v1/csrf", "/v1/register")
+                        .requestMatchers("/v1/login", "/v1/csrf", "/v1/register")
                         .permitAll()
                         .anyRequest()
                         .authenticated()

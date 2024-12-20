@@ -9,6 +9,7 @@ import org.example.ecommerce.category.controller.model.CreateCategoryResponse;
 import org.example.ecommerce.category.controller.model.UpdateDescriptionRequest;
 import org.example.ecommerce.category.jpa.CategoryJpaService;
 import org.example.ecommerce.common.NotFoundException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +20,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/v1/categories")
 @RequiredArgsConstructor
-@Validated
+@PreAuthorize(value = "hasRole('ADMIN')")
 public class CategoryController {
 
     private final CategoryJpaService categoryJpaService;
