@@ -18,7 +18,8 @@ public class GlobalRestControllerAdvice {
 
     @ExceptionHandler(exception = {HttpMessageNotReadableException.class})
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public Map<String, String> handleHttpMessageNotReadableException() {
+    public Map<String, String> handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
+        log.warn("HttpMessage could not be read",e);
         var error = "Malformed request body.";
         return Map.of("error", error);
     }
@@ -50,5 +51,11 @@ public class GlobalRestControllerAdvice {
     @ExceptionHandler(NotFoundException.class)
     public Map<String, String> handleNotFoundException(NotFoundException exception) {
         return Map.of("error",exception.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    @ExceptionHandler(BusinessException.class)
+    public Map<String, String> handleBusinessException(BusinessException exception) {
+        return Map.of("error", exception.getMessage());
     }
 }

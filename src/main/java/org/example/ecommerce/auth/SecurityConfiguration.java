@@ -38,7 +38,7 @@ public class SecurityConfiguration {
         http
                 .authorizeHttpRequests((authorize) -> authorize
                         .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.ERROR).permitAll()
-                        .requestMatchers("/v1/login", "/v1/categories", "/v1/csrf")
+                        .requestMatchers("/v1/login", "/v1/categories", "/v1/csrf", "/v1/register")
                         .permitAll()
                         .anyRequest()
                         .authenticated()

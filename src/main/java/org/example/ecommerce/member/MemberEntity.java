@@ -1,10 +1,13 @@
 package org.example.ecommerce.member;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.example.ecommerce.common.BaseEntity;
+import org.example.ecommerce.customer.CustomerEntity;
+import org.example.ecommerce.role.RoleEntity;
+
+import java.util.Set;
 
 @Getter
 @Setter
@@ -13,4 +16,16 @@ import org.example.ecommerce.common.BaseEntity;
 public class MemberEntity extends BaseEntity {
     private String email;
     private String password;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "member_role",
+            joinColumns = @JoinColumn(name = "member_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<RoleEntity> roles;
+
+    @OneToOne
+    @JoinColumn(name = "customer_id")
+    private CustomerEntity customerEntity;
 }

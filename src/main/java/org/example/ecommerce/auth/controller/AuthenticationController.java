@@ -1,9 +1,10 @@
-package org.example.ecommerce.auth;
+package org.example.ecommerce.auth.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.example.ecommerce.auth.RegistrationService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,6 +20,7 @@ public class AuthenticationController {
     private final AuthenticationManager authenticationManager;
     private final SecurityContextHolderStrategy securityContextHolderStrategy = SecurityContextHolder.getContextHolderStrategy();
     private final SecurityContextRepository securityContextRepository;
+    private final RegistrationService registrationService;
 
     @GetMapping("/csrf")
     public CsrfToken csrf(CsrfToken csrfToken) {
@@ -33,5 +35,10 @@ public class AuthenticationController {
         securityContext.setAuthentication(authentication);
         securityContextHolderStrategy.setContext(securityContext);
         securityContextRepository.saveContext(securityContext, request, response);
+    }
+
+    @PostMapping("/register")
+    public void register(@Valid @RequestBody RegisterRequest request) {
+        registrationService.register(request.email(), request.password(), request.customerDetails());
     }
 }
