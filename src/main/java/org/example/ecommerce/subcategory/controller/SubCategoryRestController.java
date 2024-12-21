@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.ecommerce.common.NotFoundException;
 import org.example.ecommerce.subcategory.SubCategory;
 import org.example.ecommerce.subcategory.jpa.SubCategoryJpaService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("v1/sub-categories")
+@PreAuthorize(value = "hasRole('ADMIN')")
 public class SubCategoryRestController {
     private final SubCategoryJpaService subCategoryJpaService;
 

@@ -2,6 +2,7 @@ package org.example.ecommerce.productinventory;
 
 import lombok.RequiredArgsConstructor;
 import org.example.ecommerce.common.NotFoundException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -9,6 +10,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/v1/inventories")
 @RequiredArgsConstructor
+@PreAuthorize(value = "hasRole('ADMIN')")
 public class ProductInventoryController {
     private final ProductInventoryJpaService productInventoryJpaService;
 

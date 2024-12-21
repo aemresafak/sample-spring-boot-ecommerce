@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.ecommerce.common.NotFoundException;
 import org.example.ecommerce.product.Product;
 import org.example.ecommerce.product.jpa.ProductJpaService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("v1/products")
 @RequiredArgsConstructor
+@PreAuthorize(value = "hasRole('ADMIN')")
 public class ProductController {
     private final ProductJpaService productJpaService;
 
