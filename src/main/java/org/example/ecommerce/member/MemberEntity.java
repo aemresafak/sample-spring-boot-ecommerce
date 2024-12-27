@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.example.ecommerce.common.BaseEntity;
 import org.example.ecommerce.customer.CustomerEntity;
 import org.example.ecommerce.role.RoleEntity;
+import org.springframework.lang.Nullable;
 
 import java.util.Set;
 
@@ -27,5 +28,6 @@ public class MemberEntity extends BaseEntity {
 
     @OneToOne
     @JoinColumn(name = "customer_id")
+    @Nullable
     private CustomerEntity customerEntity;
 }

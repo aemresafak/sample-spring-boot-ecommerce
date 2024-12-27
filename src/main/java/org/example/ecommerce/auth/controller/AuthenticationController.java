@@ -1,44 +1,27 @@
 package org.example.ecommerce.auth.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.example.ecommerce.auth.RegistrationService;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.context.SecurityContextHolderStrategy;
-import org.springframework.security.web.context.SecurityContextRepository;
-import org.springframework.security.web.csrf.CsrfToken;
-import org.springframework.web.bind.annotation.*;
+import org.example.ecommerce.auth.AuthenticationService;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/v1")
 public class AuthenticationController {
-    private final AuthenticationManager authenticationManager;
-    private final SecurityContextHolderStrategy securityContextHolderStrategy = SecurityContextHolder.getContextHolderStrategy();
-    private final SecurityContextRepository securityContextRepository;
-    private final RegistrationService registrationService;
-
-    @GetMapping("/csrf")
-    public CsrfToken csrf(CsrfToken csrfToken) {
-        return csrfToken;
-    }
+    private final AuthenticationService authenticationService;
 
     @PostMapping("/login")
-    public void login(@Valid @RequestBody LoginRequest loginRequest, HttpServletRequest request, HttpServletResponse response) {
-        var inputAuthToken = UsernamePasswordAuthenticationToken.unauthenticated(loginRequest.email(), loginRequest.credentials());
-        var authentication = authenticationManager.authenticate(inputAuthToken);
-        var securityContext = securityContextHolderStrategy.createEmptyContext();
-        securityContext.setAuthentication(authentication);
-        securityContextHolderStrategy.setContext(securityContext);
-        securityContextRepository.saveContext(securityContext, request, response);
+    public LoginResponse login(@Valid @RequestBody LoginRequest loginRequest) {
+        var token = authenticationService.login(loginRequest.email(), loginRequest.credentials());
+        return new LoginResponse(token);
     }
 
     @PostMapping("/register")
     public void register(@Valid @RequestBody RegisterRequest request) {
-        registrationService.register(request.email(), request.password(), request.customerDetails());
+        authenticationService.register(request.email(), request.password(), request.customerDetails());
     }
 }

@@ -1,5 +1,6 @@
 package org.example.ecommerce.common;
 
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -58,4 +59,13 @@ public class GlobalRestControllerAdvice {
     public Map<String, String> handleBusinessException(BusinessException exception) {
         return Map.of("error", exception.getMessage());
     }
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(JWTVerificationException.class)
+    public Map<String, String> handleJWTVerificationException(JWTVerificationException exception) {
+        log.info("Could not verify JWT", exception);
+        return Map.of("error", exception.getMessage());
+    }
+
+
 }
