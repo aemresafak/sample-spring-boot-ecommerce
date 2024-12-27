@@ -1,5 +1,6 @@
 package org.example.ecommerce.jwt;
 
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,6 +12,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -20,6 +22,7 @@ import java.util.Optional;
 @Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JWTService jwtService;
+    private final HandlerExceptionResolver handlerExceptionResolver;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
@@ -27,14 +30,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         var accessToken = getAccessTokenFromAuthenticationHeader(authenticationHeader);
         if (accessToken.isPresent()) {
-            log.info("Validating token.");
-            var jwt = jwtService.validateToken(accessToken.get());
-            var authentication = DecodedJWTMapper.toAuthentication(jwt);
+            try {
+                log.info("Validating token.");
+                var jwt = jwtService.validateToken(accessToken.get());
+                var authentication = DecodedJWTMapper.toAuthentication(jwt);
 
-            SecurityContextHolder.clearContext();
-            var securityContext = SecurityContextHolder.createEmptyContext();
-            securityContext.setAuthentication(authentication);
-            SecurityContextHolder.setContext(securityContext);
+                SecurityContextHolder.clearContext();
+                var securityContext = SecurityContextHolder.createEmptyContext();
+                securityContext.setAuthentication(authentication);
+                SecurityContextHolder.setContext(securityContext);
+            } catch (JWTVerificationException e) {
+                handlerExceptionResolver.resolveException(request,response, null, e);
+                return;
+            }
         }
 
         filterChain.doFilter(request, response);
