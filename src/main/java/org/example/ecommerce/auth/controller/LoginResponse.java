@@ -1,4 +1,6 @@
 package org.example.ecommerce.auth.controller;
 
-public record LoginResponse(String accessToken) {
+import java.util.UUID;
+
+public record LoginResponse(String accessToken, UUID refreshTokenId, String refreshToken) {
 }

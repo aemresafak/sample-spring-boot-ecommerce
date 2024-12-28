@@ -5,9 +5,10 @@ import org.example.ecommerce.role.RoleEntity;
 import org.springframework.lang.Nullable;
 
 import java.util.Collection;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
-public record Member(String email, Collection<String> roles, @Nullable Customer customer) {
+public record Member(UUID id, String email, Collection<String> roles, @Nullable Customer customer) {
     public static Member from(MemberEntity entity) {
         var roles = entity.getRoles().stream().map(RoleEntity::getName).collect(Collectors.toUnmodifiableSet());
         Customer customer;
@@ -16,6 +17,6 @@ public record Member(String email, Collection<String> roles, @Nullable Customer 
         } else {
             customer = null;
         }
-        return new Member(entity.getEmail(), roles, customer);
+        return new Member(entity.getId(), entity.getEmail(), roles, customer);
     }
 }

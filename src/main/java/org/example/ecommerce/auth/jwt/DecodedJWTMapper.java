@@ -1,4 +1,4 @@
-package org.example.ecommerce.jwt;
+package org.example.ecommerce.auth.jwt;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
 import lombok.AccessLevel;
@@ -9,7 +9,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.Arrays;
 
-import static org.example.ecommerce.jwt.JWTConstants.CLAIM_AUTHORITIES;
+import static org.example.ecommerce.auth.jwt.JWTConstants.CLAIM_AUTHORITIES;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DecodedJWTMapper {

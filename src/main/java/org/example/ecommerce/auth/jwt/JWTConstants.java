@@ -1,4 +1,4 @@
-package org.example.ecommerce.jwt;
+package org.example.ecommerce.auth.jwt;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

@@ -1,7 +1,7 @@
 package org.example.ecommerce.auth;
 
 import jakarta.servlet.DispatcherType;
-import org.example.ecommerce.jwt.JwtAuthenticationFilter;
+import org.example.ecommerce.auth.jwt.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -39,7 +39,7 @@ public class SecurityConfiguration {
         http
                 .authorizeHttpRequests((authorize) -> authorize
                         .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.ERROR).permitAll()
-                        .requestMatchers("/v1/login", "/v1/register").permitAll()
+                        .requestMatchers("/v1/login", "/v1/register", "/v1/refresh").permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))

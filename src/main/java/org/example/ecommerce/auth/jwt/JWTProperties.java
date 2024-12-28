@@ -1,4 +1,4 @@
-package org.example.ecommerce.jwt;
+package org.example.ecommerce.auth.jwt;
 
 import com.auth0.jwt.algorithms.Algorithm;
 import lombok.Getter;

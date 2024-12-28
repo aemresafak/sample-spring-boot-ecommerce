@@ -2,6 +2,7 @@ package org.example.ecommerce.common;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import lombok.extern.slf4j.Slf4j;
+import org.example.ecommerce.auth.refreshtoken.InvalidRefreshTokenException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
@@ -64,6 +65,13 @@ public class GlobalRestControllerAdvice {
     @ExceptionHandler(JWTVerificationException.class)
     public Map<String, String> handleJWTVerificationException(JWTVerificationException exception) {
         log.info("Could not verify JWT", exception);
+        return Map.of("error", exception.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(InvalidRefreshTokenException.class)
+    public Map<String, String> handleInvalidRefreshTokenException(InvalidRefreshTokenException exception) {
+        log.info("Invalid refresh token", exception);
         return Map.of("error", exception.getMessage());
     }
 
