@@ -39,7 +39,7 @@ public class RefreshTokenService {
         var member = refreshToken.member();
         var jwt = jwtService.generateToken(member);
         refreshTokenJpaService.deleteRefreshToken(refreshToken.id());
-        var newRefreshToken = refreshTokenJpaService.createRefreshToken(member.id());
+        var newRefreshToken = refreshTokenJpaService.createRefreshToken(member.id(), refreshToken.expiresAt());
         return new AuthenticationTokens(jwt, newRefreshToken.id(), newRefreshToken.token());
     }
 }

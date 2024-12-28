@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.ecommerce.common.NotFoundException;
 import org.example.ecommerce.member.Member;
 import org.example.ecommerce.member.MemberRepository;
+import org.springframework.lang.Nullable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +24,7 @@ public class RefreshTokenJpaService {
     private final RefreshTokenProperties refreshTokenProperties;
     private final PasswordEncoder passwordEncoder;
 
-    public RefreshToken createRefreshToken(UUID memberId) {
+    public RefreshToken createRefreshToken(UUID memberId, @Nullable Instant expiresAt) {
         var refreshTokenEntity = new RefreshTokenEntity();
         var refreshToken = RefreshTokenUtils.generateRefreshToken();
         var encodedRefreshToken = passwordEncoder.encode(refreshToken);
@@ -31,12 +32,19 @@ public class RefreshTokenJpaService {
 
         var memberEntity = memberRepository.findById(memberId).orElseThrow(NotFoundException::new);
         refreshTokenEntity.setMember(memberEntity);
+        if (expiresAt == null) {
+            expiresAt = Instant.now().plus(refreshTokenProperties.getValidity());
+        }
 
-        refreshTokenEntity.setExpiresAt(Instant.now().plus(refreshTokenProperties.getValidity()));
+        refreshTokenEntity.setExpiresAt(expiresAt);
 
         var savedEntity = refreshTokenRepository.save(refreshTokenEntity);
         var member = Member.from(memberEntity);
         return new RefreshToken(savedEntity.getId(), refreshToken, savedEntity.getExpiresAt(), member, savedEntity.getDeleted());
+    }
+
+    public RefreshToken createRefreshToken(UUID memberId) {
+        return createRefreshToken(memberId, null);
     }
 
     public Optional<RefreshToken> fetchRefreshToken(UUID id) {
