@@ -12,7 +12,7 @@ import java.time.Duration;
 @Setter
 @Configuration
 @ConfigurationProperties(prefix = "jwt")
-public class JWTProperties {
+class JWTProperties {
     private Duration accessTokenValidity;
     private String secret;
 

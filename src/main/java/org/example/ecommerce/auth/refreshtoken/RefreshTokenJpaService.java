@@ -18,13 +18,13 @@ import static net.logstash.logback.argument.StructuredArguments.kv;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class RefreshTokenJpaService {
+class RefreshTokenJpaService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final MemberRepository memberRepository;
     private final RefreshTokenProperties refreshTokenProperties;
     private final PasswordEncoder passwordEncoder;
 
-    public RefreshToken createRefreshToken(UUID memberId, @Nullable Instant expiresAt) {
+    RefreshToken createRefreshToken(UUID memberId, @Nullable Instant expiresAt) {
         var refreshTokenEntity = new RefreshTokenEntity();
         var refreshToken = RefreshTokenUtils.generateRefreshToken();
         var encodedRefreshToken = passwordEncoder.encode(refreshToken);
@@ -43,16 +43,16 @@ public class RefreshTokenJpaService {
         return new RefreshToken(savedEntity.getId(), refreshToken, savedEntity.getExpiresAt(), member, savedEntity.getDeleted());
     }
 
-    public RefreshToken createRefreshToken(UUID memberId) {
+    RefreshToken createRefreshToken(UUID memberId) {
         return createRefreshToken(memberId, null);
     }
 
-    public Optional<RefreshToken> fetchRefreshToken(UUID id) {
+    Optional<RefreshToken> fetchRefreshToken(UUID id) {
         log.info("Fetching refresh token {}", kv("token", id));
         return refreshTokenRepository.findById(id).map(RefreshToken::from);
     }
 
-    public void deleteRefreshToken(UUID id) {
+    void deleteRefreshToken(UUID id) {
         log.info("Deleting refresh token {}", kv("tokenId", id));
         int affectedRows = refreshTokenRepository.markAsDeleted(id);
         if (affectedRows != 1) {

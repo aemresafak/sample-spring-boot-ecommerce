@@ -15,7 +15,7 @@ import java.time.Instant;
 @Table(name = "refresh_token")
 @Getter
 @Setter
-public class RefreshTokenEntity extends BaseEntity {
+class RefreshTokenEntity extends BaseEntity {
     @ManyToOne(optional = false)
     @JoinColumn(
             name = "member_id",

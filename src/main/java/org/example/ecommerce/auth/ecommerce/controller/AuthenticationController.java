@@ -1,8 +1,8 @@
-package org.example.ecommerce.auth.controller;
+package org.example.ecommerce.auth.ecommerce.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.example.ecommerce.auth.AuthenticationService;
+import org.example.ecommerce.auth.ecommerce.AuthenticationService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,22 +11,22 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/v1")
-public class AuthenticationController {
+class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/login")
-    public LoginResponse login(@Valid @RequestBody LoginRequest loginRequest) {
+    LoginResponse login(@Valid @RequestBody LoginRequest loginRequest) {
         var token = authenticationService.login(loginRequest.email(), loginRequest.credentials());
         return new LoginResponse(token.accessToken(), token.refreshTokenId(), token.refreshToken());
     }
 
     @PostMapping("/register")
-    public void register(@Valid @RequestBody RegisterRequest request) {
-        authenticationService.register(request.email(), request.password(), request.customerDetails());
+    void register(@Valid @RequestBody RegisterRequest request) {
+        authenticationService.register(request.email(), request.password(), request.customerDetailsDTO());
     }
 
     @PostMapping("/refresh")
-    public LoginResponse refresh(@Valid @RequestBody RefreshRequest refreshRequest) {
+    LoginResponse refresh(@Valid @RequestBody RefreshRequest refreshRequest) {
         var token = authenticationService.refresh(refreshRequest.tokenId(), refreshRequest.refreshToken());
         return new LoginResponse(token.accessToken(), token.refreshTokenId(), token.refreshToken());
     }

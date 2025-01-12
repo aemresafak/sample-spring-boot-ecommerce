@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 import org.example.ecommerce.common.RandomStringUtils;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class RefreshTokenUtils {
+class RefreshTokenUtils {
     private static final int REFRESH_TOKEN_LENGTH = 256;
 
 

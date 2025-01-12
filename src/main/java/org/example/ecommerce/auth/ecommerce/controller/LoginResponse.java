@@ -1,4 +1,4 @@
-package org.example.ecommerce.auth.controller;
+package org.example.ecommerce.auth.ecommerce.controller;
 
 import java.util.UUID;
 

@@ -1,12 +1,11 @@
-package org.example.ecommerce.auth;
+package org.example.ecommerce.auth.ecommerce;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.ecommerce.auth.controller.CustomerDetails;
+import org.example.ecommerce.auth.AuthTokens;
+import org.example.ecommerce.auth.ecommerce.controller.CustomerDetailsDTO;
 import org.example.ecommerce.auth.jwt.JWTService;
-import org.example.ecommerce.auth.refreshtoken.RefreshTokenJpaService;
 import org.example.ecommerce.auth.refreshtoken.RefreshTokenService;
-import org.example.ecommerce.auth.refreshtoken.AuthenticationTokens;
 import org.example.ecommerce.customer.CustomerEntity;
 import org.example.ecommerce.customer.CustomerRepository;
 import org.example.ecommerce.member.Member;
@@ -37,26 +36,25 @@ public class AuthenticationService {
     private final CustomerRepository customerRepository;
     private final JWTService jwtService;
     private final AuthenticationManager authenticationManager;
-    private final RefreshTokenJpaService refreshTokenJpaService;
     private final RefreshTokenService refreshTokenService;
 
-    public AuthenticationTokens refresh(UUID tokenId, String refreshToken) {
+    public AuthTokens refresh(UUID tokenId, String refreshToken) {
         return refreshTokenService.refresh(tokenId, refreshToken);
     }
 
     @Transactional
-    public AuthenticationTokens login(String email, String password) {
+    public AuthTokens login(String email, String password) {
         log.info("Trying login for {}", kv("email", email));
         var token = new UsernamePasswordAuthenticationToken(email, password);
         authenticationManager.authenticate(token);
         var member = Member.from(memberRepository.findByEmailAndDeletedFalse(email).orElseThrow());
         var accessToken = jwtService.generateToken(member);
-        var refreshToken = refreshTokenJpaService.createRefreshToken(member.id());
-        return new AuthenticationTokens(accessToken, refreshToken.id(), refreshToken.token());
+        var refreshToken = refreshTokenService.createRefreshToken(member.id());
+        return new AuthTokens(accessToken, refreshToken.id(), refreshToken.token());
     }
 
     @Transactional
-    public void register(String email, String password, @Nullable CustomerDetails customerDetails) {
+    public void register(String email, String password, @Nullable CustomerDetailsDTO customerDetailsDTO) {
         log.info("Registering member {}", kv("email", email));
         memberRepository
                 .findByEmailAndDeletedFalse(email)
@@ -70,20 +68,19 @@ public class AuthenticationService {
         memberEntity.setPassword(passwordEncoder.encode(password));
         memberEntity.setRoles(roles);
 
-        createCustomerIfNecessary(customerDetails)
+        createCustomerIfNecessary(customerDetailsDTO)
                 .ifPresent(memberEntity::setCustomerEntity);
 
         memberRepository.save(memberEntity);
     }
 
-
-    private Optional<CustomerEntity> createCustomerIfNecessary(@Nullable CustomerDetails customerDetails) {
-        if (customerDetails == null) return Optional.empty();
-        log.info("Creating customer {} {}", kv("firstName", customerDetails.firstName()), kv("lastName", customerDetails.lastName()));
+    private Optional<CustomerEntity> createCustomerIfNecessary(@Nullable CustomerDetailsDTO customerDetailsDTO) {
+        if (customerDetailsDTO == null) return Optional.empty();
+        log.info("Creating customer {} {}", kv("firstName", customerDetailsDTO.firstName()), kv("lastName", customerDetailsDTO.lastName()));
         var customerEntity = new CustomerEntity();
-        customerEntity.setFirstName(customerDetails.firstName());
-        customerEntity.setLastName(customerDetails.lastName());
-        customerEntity.setBirthDate(customerDetails.birthDate());
+        customerEntity.setFirstName(customerDetailsDTO.firstName());
+        customerEntity.setLastName(customerDetailsDTO.lastName());
+        customerEntity.setBirthDate(customerDetailsDTO.birthDate());
         return Optional.of(customerRepository.save(customerEntity));
     }
 }

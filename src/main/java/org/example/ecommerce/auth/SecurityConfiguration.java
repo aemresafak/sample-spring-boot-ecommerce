@@ -1,6 +1,7 @@
 package org.example.ecommerce.auth;
 
 import jakarta.servlet.DispatcherType;
+import org.example.ecommerce.auth.ecommerce.CustomUserDetailsService;
 import org.example.ecommerce.auth.jwt.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

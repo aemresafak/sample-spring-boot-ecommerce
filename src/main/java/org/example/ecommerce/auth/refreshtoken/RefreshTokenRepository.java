@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface RefreshTokenRepository extends JpaRepository<RefreshTokenEntity, UUID> {
+interface RefreshTokenRepository extends JpaRepository<RefreshTokenEntity, UUID> {
     Optional<RefreshTokenEntity> findByToken(String token);
 
     @Transactional

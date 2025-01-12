@@ -1,10 +1,10 @@
-package org.example.ecommerce.auth.controller;
+package org.example.ecommerce.auth.ecommerce.controller;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.UUID;
 
-public record RefreshRequest(
+record RefreshRequest(
         @NotNull UUID tokenId, @NotBlank String refreshToken) {
 }

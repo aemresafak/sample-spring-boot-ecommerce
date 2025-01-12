@@ -1,4 +1,4 @@
-package org.example.ecommerce.auth;
+package org.example.ecommerce.auth.ecommerce;
 
 import org.example.ecommerce.common.BusinessException;
 

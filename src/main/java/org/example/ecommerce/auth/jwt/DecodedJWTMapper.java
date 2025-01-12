@@ -12,9 +12,9 @@ import java.util.Arrays;
 import static org.example.ecommerce.auth.jwt.JWTConstants.CLAIM_AUTHORITIES;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class DecodedJWTMapper {
+class DecodedJWTMapper {
 
-    public static Authentication toAuthentication(DecodedJWT jwt) {
+    static Authentication toAuthentication(DecodedJWT jwt) {
         var principal = jwt.getSubject();
         var authorities = Arrays.stream(jwt.getClaim(CLAIM_AUTHORITIES).asArray(String.class)).map(SimpleGrantedAuthority::new).toList();
 

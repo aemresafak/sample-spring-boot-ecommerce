@@ -1,4 +1,4 @@
-package org.example.ecommerce.auth.controller;
+package org.example.ecommerce.auth.ecommerce.controller;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
