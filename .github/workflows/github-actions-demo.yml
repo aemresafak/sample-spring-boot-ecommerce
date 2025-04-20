@@ -5,7 +5,9 @@ jobs:
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest
     steps:
+      - run: ls
       - run: pwd
       - name: Check out repository code
         uses: actions/checkout@v4
       - run: pwd
+      - run: ls
