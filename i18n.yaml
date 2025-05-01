@@ -1,6 +1,6 @@
 # Localization Configuration
 version: v1.0
-localization_root_path: src/main/resources/
+localization_root_path: src/main/resources/i18n
 file_name_pattern: "messages_{language}.properties"
 source_lang_code: en        # Source language code (required)
 target_lang_codes:           # List of target language codes (required)
