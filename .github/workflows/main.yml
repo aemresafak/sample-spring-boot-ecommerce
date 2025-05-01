@@ -1,0 +1,24 @@
+name: threepio-runner
+run-name: threepio is being run! Localization is coming.
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  set-up-threepio:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Checkout private repository
+        uses: actions/checkout@v4
+        with:
+          repository: aemresafak/threepio
+          path: threepio
+          token: ${{ secrets.ACCESS_TOKEN }}  # Personal access token with repo scope
+
+      - run: ls
+      - run: pwd
+
