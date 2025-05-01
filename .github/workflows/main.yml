@@ -30,11 +30,13 @@ jobs:
           version: 2.1.2
           virtualenvs-create: true
           virtualenvs-in-project: true
+
+      - run: pwd
       
       - name: Install dependencies
         run: poetry --directory=threepio install
       
       - name: Run threepio
-        run: poetry --directory=threepio run python i18n.config  # Adjust this command based on how your package should be run
+        run: poetry --directory=threepio run python threepio/src/threepio/main.py i18n.config
 
 
