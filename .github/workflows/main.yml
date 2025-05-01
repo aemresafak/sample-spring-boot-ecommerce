@@ -33,7 +33,7 @@ jobs:
         run: poetry --directory=threepio install
       
       - name: Run threepio
-        run: poetry --directory=threepio run python src/threepio/main.py i18n.yaml
+        run: poetry --directory=threepio run python src/threepio/main.py ../i18n.yaml
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7
