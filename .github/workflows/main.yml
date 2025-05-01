@@ -37,6 +37,6 @@ jobs:
         run: poetry --directory=threepio install
       
       - name: Run threepio
-        run: poetry --directory=threepio run python src/threepio/main.py i18n.config
+        run: poetry --directory=threepio run python src/threepio/main.py i18n.yaml
 
 
