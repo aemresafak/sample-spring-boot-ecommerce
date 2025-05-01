@@ -7,7 +7,6 @@ on:
 
 jobs:
   set-up-threepio:
-  
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -20,6 +19,22 @@ jobs:
           path: threepio
           token: ${{ secrets.ACCESS_TOKEN }}  # Personal access token with repo scope
 
-      - run: ls
-      - run: pwd
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.13'
+      
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: 2.1.2
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+      
+      - name: Install dependencies
+        run: poetry --directory=/threepio install
+      
+      - name: Run threepio
+        run: poetry --directory=/threepio run python i18n.config  # Adjust this command based on how your package should be run
+
 
