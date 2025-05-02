@@ -41,18 +41,19 @@ jobs:
       - name: Run threepio
         run: poetry --directory=threepio run python src/threepio/main.py ../i18n.yaml
 
+      - name: Clean up threepio
+        run: rm -rf threepio
+
       - name: Check for changes
         id: check-changes
         run: |
           if [[ -n "$(git status --porcelain)" ]]; then
+            echo "Changes detected in localization files. Creating PR."
             echo "changes_detected=true" >> $GITHUB_OUTPUT
           else
             echo "changes_detected=false" >> $GITHUB_OUTPUT
             echo "No changes detected in localization files. Skipping PR creation."
           fi
-
-      - name: Clean up threepio
-        run: rm -rf threepio
 
       - name: Create Pull Request
         if: steps.check-changes.outputs.changes_detected == 'true'
