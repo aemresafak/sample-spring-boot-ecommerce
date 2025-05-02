@@ -37,35 +37,39 @@ jobs:
         run: |
           SHA_SHORT=$(git rev-parse --short HEAD)
           echo "sha_short=$SHA_SHORT" >> $GITHUB_OUTPUT
+          # Sanitize commit message for GITHUB_OUTPUT by replacing newlines
+          COMMIT_MSG=$(git log -1 --pretty=%s | tr -d '\n')
+          echo "commit_message=$COMMIT_MSG" >> $GITHUB_OUTPUT
 
       - name: Run threepio
         run: poetry --directory=threepio run python src/threepio/main.py ../i18n.yaml
-
-      - name: Clean up threepio
-        run: rm -rf threepio
 
       - name: Check for changes
         id: check-changes
         run: |
           if [[ -n "$(git status --porcelain)" ]]; then
-            echo "Changes detected in localization files. Creating PR."
             echo "changes_detected=true" >> $GITHUB_OUTPUT
           else
             echo "changes_detected=false" >> $GITHUB_OUTPUT
             echo "No changes detected in localization files. Skipping PR creation."
           fi
 
+      - name: Clean up threepio
+        run: rm -rf threepio
+
       - name: Create Pull Request
         if: steps.check-changes.outputs.changes_detected == 'true'
         uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.ACCESS_TOKEN }}
-          commit-message: "Update localization files from commit ${{ steps.commit-info.outputs.sha_short }}"
-          title: "Localization Update (${{ steps.commit-info.outputs.sha_short }})"
+          commit-message: "[Bot] Update localization files from commit ${{ steps.commit-info.outputs.sha_short }}"
+          title: "[Bot] Localization Update (${{ steps.commit-info.outputs.sha_short }})"
           body: |
-            This PR was automatically created by the threepio-runner workflow.
+            🤖 **This PR was automatically created by the threepio-runner workflow.**
             
             Localization files have been updated from commit ${{ steps.commit-info.outputs.sha_short }}.
-
+            
+            Original commit message: "${{ steps.commit-info.outputs.commit_message }}"
           branch: localization-${{ steps.commit-info.outputs.sha_short }}
           base: main
+          labels: automated-pr, bot
