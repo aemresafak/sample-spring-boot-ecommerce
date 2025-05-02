@@ -32,31 +32,39 @@ jobs:
       - name: Install dependencies
         run: poetry --directory=threepio install
 
+      - name: Get commit info
+        id: commit-info
+        run: |
+          SHA_SHORT=$(git rev-parse --short HEAD)
+          echo "sha_short=$SHA_SHORT" >> $GITHUB_OUTPUT
+
       - name: Run threepio
         run: poetry --directory=threepio run python src/threepio/main.py ../i18n.yaml
+
+      - name: Check for changes
+        id: check-changes
+        run: |
+          if [[ -n "$(git status --porcelain)" ]]; then
+            echo "changes_detected=true" >> $GITHUB_OUTPUT
+          else
+            echo "changes_detected=false" >> $GITHUB_OUTPUT
+            echo "No changes detected in localization files. Skipping PR creation."
+          fi
 
       - name: Clean up threepio
         run: rm -rf threepio
 
-      - name: Get commit info
-        id: commit-info
-        run: |
-          echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
-          echo "commit_message=$(git log -1 --pretty=%B)" >> $GITHUB_OUTPUT
-          echo "commit_date=$(git log -1 --format=%cd --date=short)" >> $GITHUB_OUTPUT
-
-
       - name: Create Pull Request
+        if: steps.check-changes.outputs.changes_detected == 'true'
         uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.ACCESS_TOKEN }}
           commit-message: "Update localization files from commit ${{ steps.commit-info.outputs.sha_short }}"
-          title: "Localization Update from ${{ steps.commit-info.outputs.sha_short }} - ${{ steps.commit-info.outputs.commit_date }}"
+          title: "Localization Update (${{ steps.commit-info.outputs.sha_short }})"
           body: |
             This PR was automatically created by the threepio-runner workflow.
             
             Localization files have been updated from commit ${{ steps.commit-info.outputs.sha_short }}.
-            
-            Original commit message: "${{ steps.commit-info.outputs.commit_message }}"
-          branch: localization-update-${{ steps.commit-info.outputs.sha_short }}
+
+          branch: localization-${{ steps.commit-info.outputs.sha_short }}
           base: main
