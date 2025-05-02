@@ -13,7 +13,7 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        
+
       - name: Checkout private repository
         uses: actions/checkout@v4
         with:
@@ -28,21 +28,35 @@ jobs:
 
       - name: Install Poetry
         uses: snok/install-poetry@v1
+
       - name: Install dependencies
         run: poetry --directory=threepio install
-      
+
       - name: Run threepio
         run: poetry --directory=threepio run python src/threepio/main.py ../i18n.yaml
+
+      - name: Clean up threepio
+        run: rm -rf threepio
+
+      - name: Get commit info
+        id: commit-info
+        run: |
+          echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+          echo "commit_message=$(git log -1 --pretty=%B)" >> $GITHUB_OUTPUT
+          echo "commit_date=$(git log -1 --format=%cd --date=short)" >> $GITHUB_OUTPUT
+
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.ACCESS_TOKEN }}
-          commit-message: "Update localization files via threepio"
-          title: "Localization Update"
+          commit-message: "Update localization files from commit ${{ steps.commit-info.outputs.sha_short }}"
+          title: "Localization Update from ${{ steps.commit-info.outputs.sha_short }} - ${{ steps.commit-info.outputs.commit_date }}"
           body: |
             This PR was automatically created by the threepio-runner workflow.
             
-            Localization files have been updated.
-          branch: localization-update
+            Localization files have been updated from commit ${{ steps.commit-info.outputs.sha_short }}.
+            
+            Original commit message: "${{ steps.commit-info.outputs.commit_message }}"
+          branch: localization-update-${{ steps.commit-info.outputs.sha_short }}
           base: main
