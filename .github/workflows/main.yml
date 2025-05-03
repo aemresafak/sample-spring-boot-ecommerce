@@ -41,21 +41,21 @@ jobs:
           COMMIT_MSG=$(git log -1 --pretty=%s | tr -d '\n')
           echo "commit_message=$COMMIT_MSG" >> $GITHUB_OUTPUT
 
-      - name: Check for VERTEXAI service account key
-        id: check-vertexai
+      - name: Check for Vertex AI service account key
+        id: check-vertex-ai
         run: |
-          if [[ -n "${{ secrets.VERTEXAI_SERVICE_ACCOUNT_KEY }}" ]]; then
-            echo "vertexai_key_present=true" >> $GITHUB_OUTPUT
+          if [[ -n "${{ secrets.VERTEX_AI_SERVICE_ACCOUNT_KEY || '' }}" ]]; then
+            echo "vertex_ai_key_present=true" >> $GITHUB_OUTPUT
           else
-            echo "vertexai_key_present=false" >> $GITHUB_OUTPUT
-            echo "VERTEXAI_SERVICE_ACCOUNT_KEY is not present. Skipping Google Cloud authentication."
+            echo "vertex_ai_key_present=false" >> $GITHUB_OUTPUT
+            echo "VERTEX_AI_SERVICE_ACCOUNT_KEY is not present. Skipping Google Cloud authentication."
           fi
 
       - name: Authenticate to Google Cloud
-        if: steps.check-vertexai.outputs.vertexai_key_present == 'true'
+        if: steps.check-vertex-ai.outputs.vertex_ai_key_present == 'true'
         uses: google-github-actions/auth@v2
         with:
-          credentials_json: ${{ secrets.VERTEXAI_SERVICE_ACCOUNT_KEY }}
+          credentials_json: ${{ secrets.VERTEX_AI_SERVICE_ACCOUNT_KEY }}
 
       - name: Run threepio
         run: poetry --directory=threepio run python src/threepio/main.py ../i18n.yaml
