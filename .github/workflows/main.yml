@@ -62,8 +62,10 @@ jobs:
             echo "No changes detected in localization files. Skipping PR creation."
           fi
 
-      - name: Clean up threepio
-        run: rm -rf threepio
+      - name: Clean up
+        run: |
+          rm -rf threepio
+          rm -f "$GOOGLE_APPLICATION_CREDENTIALS"
 
       - name: Create Pull Request
         if: steps.check-changes.outputs.changes_detected == 'true'
