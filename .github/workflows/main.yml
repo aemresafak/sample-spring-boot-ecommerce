@@ -41,18 +41,10 @@ jobs:
           COMMIT_MSG=$(git log -1 --pretty=%s | tr -d '\n')
           echo "commit_message=$COMMIT_MSG" >> $GITHUB_OUTPUT
 
-      - name: Check for Vertex AI service account key
-        id: check-vertex-ai
-        run: |
-          if [[ -n "${{ secrets.VERTEX_AI_SERVICE_ACCOUNT_KEY || '' }}" ]]; then
-            echo "vertex_ai_key_present=true" >> $GITHUB_OUTPUT
-          else
-            echo "vertex_ai_key_present=false" >> $GITHUB_OUTPUT
-            echo "VERTEX_AI_SERVICE_ACCOUNT_KEY is not present. Skipping Google Cloud authentication."
-          fi
-
       - name: Authenticate to Google Cloud
-        if: steps.check-vertex-ai.outputs.vertex_ai_key_present == 'true'
+        env:
+          super_secret: ${{ secrets.VERTEX_AI_SERVICE_ACCOUNT_KEY }}
+        if: ${{ env.VERTEX_AI_SERVICE_ACCOUNT_KEY != '' }}
         uses: google-github-actions/auth@v2
         with:
           credentials_json: ${{ secrets.VERTEX_AI_SERVICE_ACCOUNT_KEY }}
