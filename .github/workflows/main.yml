@@ -43,7 +43,7 @@ jobs:
 
       - name: Authenticate to Google Cloud
         env:
-          super_secret: ${{ secrets.VERTEX_AI_SERVICE_ACCOUNT_KEY }}
+          VERTEX_AI_SERVICE_ACCOUNT_KEY: ${{ secrets.VERTEX_AI_SERVICE_ACCOUNT_KEY }}
         if: ${{ env.VERTEX_AI_SERVICE_ACCOUNT_KEY != '' }}
         uses: google-github-actions/auth@v2
         with:
