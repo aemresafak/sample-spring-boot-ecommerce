@@ -6,7 +6,7 @@ source_lang_code: en        # Source language code (required)
 target_lang_codes:           # List of target language codes (required)
   - tr
   - it
-context: |
+context: |    
   You work for a horse matchmaking company called Neightr. Your job will be to localize their application with the above criteria.
   Neightr is a specialized matchmaking platform designed exclusively for horse owners and breeders. The application helps match horses for breeding, companionship, or competitive partnerships based on breed compatibility, genetic traits, temperament, and performance history.
 glossary:                   # Optional glossary dictionary
