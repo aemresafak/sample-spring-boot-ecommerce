@@ -1,0 +1,13 @@
+name: deneme-action
+run-name: deneme-action
+on:
+  push:
+    branches:
+      - main
+jobs:
+  set-up-action:
+      runs-on: ubuntu-latest
+      steps:
+        - name: deneme
+          uses: aemresafak/threepio-action@v1
+
