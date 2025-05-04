@@ -8,8 +8,4 @@ jobs:
       - id: foo
         uses: aemresafak/threepio-action@v1
         with:
-          vertex-ai-service-account-key: $ {{ secrets.VERTEX_AI_SERVICE_ACCOUNT_KEY }}
-      - run: echo random-number "$RANDOM_NUMBER"
-        shell: bash
-        env:
-          RANDOM_NUMBER: ${{ steps.foo.outputs.random-number }}
+          vertex-ai-service-account-key-base64: $ {{ secrets.VERTEX_AI_SERVICE_ACCOUNT_KEY_BASE64 }}
