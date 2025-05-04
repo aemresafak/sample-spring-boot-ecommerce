@@ -3,7 +3,7 @@ run-name: threepio is being run! Localization is coming.
 on:
   push:
     branches:
-      - main
+      - feat
 
 jobs:
   set-up-threepio:
