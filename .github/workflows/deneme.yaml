@@ -8,4 +8,4 @@ jobs:
       - id: foo
         uses: aemresafak/threepio-action@v1
         with:
-          vertex-ai-service-account-key-base64: $ {{ secrets.VERTEX_AI_SERVICE_ACCOUNT_KEY_BASE64 }}
+          vertex-ai-service-account-key-base64: ${{ secrets.VERTEX_AI_SERVICE_ACCOUNT_KEY_BASE64 }}
