@@ -10,6 +10,6 @@ jobs:
     runs-on: macos-latest
     name: A job to localize
     steps:
-      - uses: aemresafak/threepio-action@v1
+      - uses: aemresafak/locawise-action@v1
         with:
           vertex-ai-service-account-key-base64: ${{ secrets.VERTEX_AI_SERVICE_ACCOUNT_KEY_BASE64 }}
