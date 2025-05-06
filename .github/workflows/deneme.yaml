@@ -8,7 +8,7 @@ permissions:
 jobs:
   hello_world_job:
     runs-on: macos-latest
-    name: A job to localize
+    name: Automated Localisation with Locawise
     steps:
       - uses: aemresafak/locawise-action@v1
         with:
