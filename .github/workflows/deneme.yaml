@@ -9,6 +9,7 @@ jobs:
   hello_world_job:
     runs-on: macos-latest
     name: Automated Localisation with Locawise
+    
     steps:
       - uses: aemresafak/locawise-action@v1
         with:
