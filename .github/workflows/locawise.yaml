@@ -1,0 +1,15 @@
+on: [push]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+
+jobs:
+  locawise-action:
+    runs-on: macos-latest
+    name: Automated Localisation with Locawise
+    steps:
+      - uses: aemresafak/locawise-action@v1
+        with:
+          vertex-ai-service-account-key-base64: ${{ secrets.VERTEX_AI_SERVICE_ACCOUNT_KEY_BASE64 }}
