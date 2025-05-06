@@ -1,0 +1,21 @@
+# Localization Configuration for ShopSphere E-commerce Platform
+version: v1.0
+localization-root-path: src/main/resources/i18n
+file-name-pattern: "messages_{language}.properties"
+source-lang-code: en        # Source language code (required)
+target-lang-codes:           # List of target language codes (required)
+  - es  # Spanish
+  - fr  # French
+  - de  # German
+  - it
+  - tr
+  - ja
+context: |
+  You work for ShopSphere, a global e-commerce platform. Your task is to localize the application content for various international markets.
+  ShopSphere is a comprehensive online marketplace that connects buyers and sellers from around the world. It offers a wide variety of products, including electronics, fashion, home goods, books, and more. The platform aims to provide a seamless and secure shopping experience, with features like personalized recommendations, easy checkout, multiple payment options, and reliable shipping.
+
+glossary:                   # Optional glossary dictionary
+  customer: An individual or entity that browses, purchases, or considers purchasing products on the ShopSphere platform.
+  seller: An individual, business, or brand that lists and sells products through the ShopSphere marketplace.
+  product: Any item, good, or service offered for sale on ShopSphere.
+  SKU: "Stock Keeping Unit. A unique alphanumeric code assigned to each distinct product for inventory tracking."
