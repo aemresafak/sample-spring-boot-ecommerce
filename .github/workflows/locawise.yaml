@@ -13,9 +13,6 @@ jobs:
   localize:
     runs-on: macos-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
       - name: Run Locawise Localization
         uses: aemresafak/locawise-action@v1
         with:
