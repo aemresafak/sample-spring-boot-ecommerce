@@ -28,7 +28,7 @@ jobs:
             seller: An individual, business, or brand that lists and sells products through the ShopSphere marketplace.
             product: Any item, good, or service offered for sale on ShopSphere.
             SKU: "Stock Keeping Unit. A unique alphanumeric code assigned to each distinct product for inventory tracking."
-          vertex-ai-service-account-key-base64: ${{ secrets.VERTEX_AI_SERVICE_ACCOUNT_KEY_BASE64 }}
+          openai-api-key	: ${{ secrets.OPENAI_API_KEY }}
 
       - name: Get commit info
         id: commit-info
